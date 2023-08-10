@@ -16,9 +16,7 @@ const cors = require('cors');
 
 server.use(cors({
 	optionsSuccessStatus: 204,
-	origin: [
-		"localhost:*"
-	]
+	origin: "*"
 }));
 server.use(cookieParser());
 server.use(fileupload());
