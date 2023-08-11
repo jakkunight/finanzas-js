@@ -1,4 +1,5 @@
 const express = require("express");
+const chlk = require('chlk');
 
 // Instancia del servidor HTTP:
 const server = express();
@@ -13,6 +14,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const fileupload = require('express-fileupload');
 const cors = require('cors');
+const chalk = require("chalk");
 
 server.use(cors({
 	optionsSuccessStatus: 204,
@@ -26,10 +28,9 @@ server.use(bodyParser.urlencoded({
 }));
 
 // Routers:
-const index = require("./routes/index.js");
-server.use(index);
+
 
 // Inicio del servidor:
 server.listen(server.get("port"), () => {
-	console.log("[INFO] Server on port", server.get("port"));
+	console.log(chalk.greenBright("[INFO] Server on port"), chalk.greenBright(server.get("port")));
 });

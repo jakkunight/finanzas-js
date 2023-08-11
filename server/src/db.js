@@ -1,5 +1,6 @@
 // Instancia de conector a MySQL/MariaDB:
 const mysql2 = require('mysql2');
+const chalk = require('chalk');
 
 // Configuración:
 const dotenv = require('dotenv');
@@ -15,10 +16,10 @@ const pool = mysql2.createPool({
 
 pool.getConnection((err, conn) => {
 	if(err){
-		console.error(err);
+		console.error(chalk.redBright(JSON.stringify(err)));
 		return;
 	}
-	console.log("[SUCCESS] DATABASE online.");
+	console.log(chalk.greenBright("[SUCCESS] DATABASE online."));
 	return conn;
 });
 
