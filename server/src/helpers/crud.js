@@ -1,67 +1,67 @@
 const pool = require('../db.js');
-const chalk = require('chalk');
 
 // Funciones CRUD:
-async function leerTabla(tabla) {
-	try {
-		const datos = (await pool.query("SELECT * FROM " + tabla))[0];
-		console.log(chalk.blueBright("[INFO] Se leyeron los datos de '" + tabla + "'"));
+const crud = {};
+
+crud.leerTabla = async (
+	{
+		tabla = "",
+	}
+) => {
+	if(!tabla){
+		console.log("[ERROR] No se especificó una tabla para consultar.");
+		throw new Error("[ERROR] No se especificó una tabla para consultar.");
+	}
+	try{
+		const datos = (await pool.query(`SELECT * FROM ${tabla}`))[0];
+		console.log(`[INFO] Se leyó/leyeron ${datos.length} fila/filas de '${tabla}'`);
 		return datos;
-	} catch (e) {
-		console.error(chalk.redBright(JSON.stringify(e)));
-		return;
+	}catch(e){
+		console.error(e);
+		return e;
 	}
-}
-
-async function insertarFila(tabla, fila) {
-	try {
-		const resultado = (await pool.query("INSERT INTO " + tabla + " SET ?", [fila]))[0];
-		console.log(resultado);
-		console.log(chalk.greenBright("[INFO] Se insertaron datos en '" + tabla + "'"));
-		return resultado;
-	} catch (e) {
-		console.error(chalk.redBright(JSON.stringify(e)));
-		return;
-	}
-}
-
-async function actualizarFila(tabla, nuevaFila, id) {
-	try {
-		const result = (await pool.query("UPDATE " + tabla + " SET ? WHERE id = ?", [nuevaFila, id]))[0];
-		console.log(chalk.blueBright("[INFO] Se actualizaron los datos de '" + tabla + "' en la fila '" + id + "'"));
-		return result;
-	} catch (e) {
-		console.error(chalk.redBright(JSON.stringify(e)));
-		return;
-	}
-}
-
-async function borrarFila(tabla, id) {
-	try {
-		const result = (await pool.query("DELETE FROM " + tabla + " WHERE id = ?", [id]))[0];
-		console.log(chalk.blueBright("[INFO] Se eliminaron datos de '" + tabla + "' en la fila '" + id + "'"));
-		return result;
-	} catch (e) {
-		console.error(chalk.redBright(JSON.stringify(e)));
-		return;
-	}
-}
-
-// Funciones adicionales:
-async function encontrarFila({ tabla, campo = "id", valor = 1 } = {}) {
-	try {
-		return true;
-	} catch (e) {
-		console.error(chalk.redBright(JSON.stringify(e)));
-		return false;
-	}
-}
-
-encontrarFila()
-
-module.exports = {
-	leerTabla,
-	insertarFila,
-	actualizarFila,
-	borrarFila
 };
+
+crud.encontrarFila = async (
+	{
+		tabla = "",
+		parametros = {
+			id: 0
+		}
+	}
+) => {
+	if(!tabla){
+		console.log("[ERROR] No se especificó una tabla para consultar.");
+		throw new Error("[ERROR] No se especificó una tabla para consultar.");
+	}
+	if(!parametros || parametros.id <= 0){
+		console.log("[ERROR] No se especificó al menos un parámetro de búsqueda.");
+		throw new Error("[ERROR] No se especificó al menos un parámetro de búsqueda.");
+	}
+	try{
+		let condiciones = "";
+		let entradas = Object.entries(parametros);
+		entradas.forEach((entrada, i) => {
+			condiciones += `${entrada[0]} = ${entrada[1]}`;
+			if(i < entradas.length - 1){
+				condiciones += " AND ";
+			}
+		});
+		const datos = (await pool.query(`SELECT * FROM ${tabla} WHERE ${condiciones} ORDER BY id`))[0];
+		console.log(`[INFO] Se encontró/encontraron ${datos.length} fila/filas de '${tabla}'`);
+		return datos;
+	}catch(e){
+		console.error(e);
+		return e;
+	}
+};
+
+crud.encontrarFila({
+	tabla: "ingresos",
+	parametros: {
+		tipo: 2,
+		concepto: 1
+	}
+}).then(datos => console.table(datos));
+
+module.exports = crud;

@@ -33,7 +33,7 @@
 	const obtenerPresupuestos = async () => {
 		try{
 			let headers = new Headers();
-			headers.append("Access-Control-Allow-Origin", "localhost:5173");
+			headers.append("Access-Control-Allow-Origin", "*");
 			let response = await fetch("http://localhost:3000/presupuestos", {
 				method: "GET",
 				mode: "cors",
