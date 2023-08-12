@@ -16,9 +16,7 @@ const cors = require('cors');
 
 server.use(cors({
 	optionsSuccessStatus: 204,
-	origin: [
-		"localhost:*"
-	]
+	origin: "*"
 }));
 server.use(cookieParser());
 server.use(fileupload());
@@ -29,7 +27,9 @@ server.use(bodyParser.urlencoded({
 
 // Routers:
 const index = require("./routes/index.js");
+const conceptos = require("./routes/conceptos.js");
 server.use(index);
+server.use(conceptos);
 
 // Inicio del servidor:
 server.listen(server.get("port"), () => {

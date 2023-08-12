@@ -1,5 +1,4 @@
 -- Datos de prueba:
--- Gastos:
 INSERT INTO  concepto_gastos ( concepto, descripcion ) VALUES(
 	"ALIMENTACIÓN",
 	"Es el dinero que se destina a la compra de alimentos."
@@ -27,14 +26,4 @@ INSERT INTO  concepto_gastos ( concepto, descripcion ) VALUES(
 INSERT INTO  concepto_gastos ( concepto, descripcion ) VALUES(
 	"SALUD",
 	"Es el dinero utilizado para afrontar enfermedades o mantener una buena salud."
-);
-
--- Ingresos:
-INSERT INTO  concepto_ingresos ( concepto, descripcion ) VALUES(
-	"SALARIO",
-	"Es el dinero recibido por un trabajo o servicio prestados."
-);
-INSERT INTO  concepto_ingresos ( concepto, descripcion ) VALUES(
-	"COMISIÓN",
-	"Es el dinero ganado sobre el porcentaje de venta de un producto o servicio."
 );
